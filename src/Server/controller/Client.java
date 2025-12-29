@@ -584,25 +584,45 @@ public class Client implements Runnable {
 
                         PlayerBUS bus = new PlayerBUS();
                         Player winner = loginPlayer;
-                        Player loser = cCompetitor.loginPlayer;
+                        
+                        // find competitor (the other player in the room)
+                        Client competitorClient = null;
+                        ArrayList<Client> roomClients = joinedRoom.getClients();
+                        for (Client c : roomClients) {
+                            if (!c.loginPlayer.getEmail().equals(this.loginPlayer.getEmail())) {
+                                competitorClient = c;
+                                break;
+                            }
+                        }
+                        
+                        Player loser = null;
+                        if (competitorClient != null) {
+                            loser = competitorClient.loginPlayer;
+                        } else if (cCompetitor != null) {
+                            // fallback to cCompetitor if available
+                            loser = cCompetitor.loginPlayer;
+                        }
 
-                        // tinh diem
-                        winner.addScore(3);
-                        winner.setWinCount(winner.getWinCount() + 1);
-                        loser.addScore(-2);
-                        loser.setLoseCount(loser.getLoseCount() - 1);
-                        bus.update(winner);
-                        bus.update(loser);
+                        // only update scores if we found a loser
+                        if (loser != null) {
+                            // tinh diem
+                            winner.addScore(3);
+                            winner.setWinCount(winner.getWinCount() + 1);
+                            loser.addScore(-2);
+                            loser.setLoseCount(loser.getLoseCount() - 1);
+                            bus.update(winner);
+                            bus.update(loser);
 
-                        // TODO luu game match
-                        new GameMatchBUS().add(new GameMatch(
-                                winner.getId(),
-                                loser.getId(),
-                                winner.getId(),
-                                Caro.MATCH_TIME_LIMIT - ((Caro) joinedRoom.getGamelogic()).getMatchTimer().getCurrentTick(),
-                                ((Caro) joinedRoom.getGamelogic()).getHistory().size(),
-                                joinedRoom.startedTime
-                        ));
+                            // TODO luu game match
+                            new GameMatchBUS().add(new GameMatch(
+                                    winner.getId(),
+                                    loser.getId(),
+                                    winner.getId(),
+                                    Caro.MATCH_TIME_LIMIT - ((Caro) joinedRoom.getGamelogic()).getMatchTimer().getCurrentTick(),
+                                    ((Caro) joinedRoom.getGamelogic()).getHistory().size(),
+                                    joinedRoom.startedTime
+                            ));
+                        }
 
                         // stop game timer
                         caroGame.cancelTimer();

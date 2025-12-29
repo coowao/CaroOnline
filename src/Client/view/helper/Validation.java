@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Client.view.helper;
 
 import java.text.Normalizer;
@@ -11,10 +6,6 @@ import java.util.regex.Pattern;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-/**
- *
- * @author Hoang Tran < hoang at 99.hoangtran@gmail.com >
- */
 public class Validation {
 
     public static boolean checkEmail(String email) {

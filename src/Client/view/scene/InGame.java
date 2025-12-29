@@ -40,6 +40,7 @@ public class InGame extends javax.swing.JFrame {
 
     CountDownTimer turnTimer;
     CountDownTimer matchTimer;
+    boolean gameEnded = false;
 
     /**
      * Creates new form InGame
@@ -124,6 +125,9 @@ public class InGame extends javax.swing.JFrame {
     }
 
     public void setWin(String winEmail) {
+        // mark game as ended
+        gameEnded = true;
+        
         // pause timer
         matchTimer.pause();
         turnTimer.pause();
@@ -272,6 +276,11 @@ public class InGame extends javax.swing.JFrame {
     }
 
     public void clickOnBoard(int row, int column) {
+        // prevent move if game has ended
+        if (gameEnded) {
+            return;
+        }
+        
         String myEmail = RunClient.socketHandler.getLoginEmail();
 
         if (myEmail.equals(player1.getEmail()) || myEmail.equals(player2.getEmail())) {

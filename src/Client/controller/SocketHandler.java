@@ -614,7 +614,9 @@ public class SocketHandler {
                 int turnTimeLimit = Integer.parseInt(splitted[2]);
                 int matchTimeLimit = Integer.parseInt(splitted[3]);
 
-                RunClient.inGameScene.startGame(turnTimeLimit, matchTimeLimit);
+                SwingUtilities.invokeLater(() -> {
+                    RunClient.inGameScene.startGame(turnTimeLimit, matchTimeLimit);
+                });
                 break;
 
             case MOVE:
@@ -622,32 +624,44 @@ public class SocketHandler {
                 int column = Integer.parseInt(splitted[3]);
                 String _email = splitted[4];
 
-                RunClient.inGameScene.addPoint(row, column, _email);
-                RunClient.inGameScene.changeTurnFrom(_email);
+                SwingUtilities.invokeLater(() -> {
+                    RunClient.inGameScene.addPoint(row, column, _email);
+                    RunClient.inGameScene.changeTurnFrom(_email);
+                });
                 break;
 
             case WIN:
                 String winEmail = splitted[2];
-                RunClient.inGameScene.setWin(winEmail);
+                SwingUtilities.invokeLater(() -> {
+                    RunClient.inGameScene.setWin(winEmail);
+                });
                 break;
 
             case TURN_TICK:
                 int turnValue = Integer.parseInt(splitted[2]);
-                RunClient.inGameScene.setTurnTimerTick(turnValue);
+                SwingUtilities.invokeLater(() -> {
+                    RunClient.inGameScene.setTurnTimerTick(turnValue);
+                });
                 break;
 
             case TURN_TIMER_END:
                 String winnerEmail = splitted[2];
-                RunClient.inGameScene.setWin(winnerEmail);
+                SwingUtilities.invokeLater(() -> {
+                    RunClient.inGameScene.setWin(winnerEmail);
+                });
                 break;
 
             case MATCH_TICK:
                 int matchValue = Integer.parseInt(splitted[2]);
-                RunClient.inGameScene.setMatchTimerTick(matchValue);
+                SwingUtilities.invokeLater(() -> {
+                    RunClient.inGameScene.setMatchTimerTick(matchValue);
+                });
                 break;
 
             case MATCH_TIMER_END:
-                RunClient.inGameScene.setWin(null);
+                SwingUtilities.invokeLater(() -> {
+                    RunClient.inGameScene.setWin(null);
+                });
                 break;
         }
     }
